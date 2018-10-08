@@ -106,15 +106,7 @@ cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
 byte[] encrypted = cipher.doFinal(clear);
 return encrypted;
 }
-private static byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception {
-SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-Cipher cipher = Cipher.getInstance("AES");
-cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-String en=new String(encrypted);
-byte[] decrypted = cipher.doFinal(encrypted);
-return decrypted;
-}
- static String readFile(String fileName) throws IOException {
+static String readFile(String fileName) throws IOException {
       BufferedReader br = new BufferedReader(new FileReader(fileName));
      try {
         StringBuilder sb = new StringBuilder();
@@ -130,51 +122,7 @@ return decrypted;
         br.close();
     }
  }
- private static void decrypt1(String encrypted) throws Exception {
-     Security.addProvider(new BouncyCastleProvider());
-    try{
-   String path = "C:\\Users\\Kannu\\Documents\\NetBeansProjects\\security\\X"; 
-    File filePublicKey = new File(path +"\\public.key");
-   FileInputStream fis = new FileInputStream(path + "\\public.key");
-   byte[] encodedPublicKey = new byte[(int) filePublicKey.length()];
-   fis.read(encodedPublicKey);
-   fis.close();
-     // Read Private Key.
-   File filePrivateKey = new File(path + "\\private.key");
-   fis = new FileInputStream(path + "\\private.key");
-   byte[] encodedPrivateKey = new byte[(int) filePrivateKey.length()];
-   fis.read(encodedPrivateKey);
-   fis.close();
-     // Generate KeyPair.
-   KeyFactory keyFactory = KeyFactory.getInstance("ECDH");
-   X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(
-     encodedPublicKey);
-   PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-     PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(
-     encodedPrivateKey);
-   PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);   
-        aKeyAgree = KeyAgreement.getInstance("ECDH", "BC");
-      aKeyAgree.init(privateKey);
-      aKeyAgree.doPhase(publicKey, true);     
-        byte[] aBys = aKeyAgree.generateSecret(); 
-      KeySpec aKeySpec = new DESKeySpec(aBys);
-      SecretKeyFactory aFactory = SecretKeyFactory.getInstance("DES");
-      Key aSecretKey = aFactory.generateSecret(aKeySpec);
-      Cipher aCipher = Cipher.getInstance(aSecretKey.getAlgorithm());   
-      aCipher.init(Cipher.DECRYPT_MODE, aSecretKey); 
-      byte[] decText = aCipher.doFinal(Base64.decodeBase64(encrypted.getBytes()));
-      String text = new String(decText);
-       try{
-                    FileOutputStream fileOutputStream=new FileOutputStream("Decrypted.txt");
-                    fileOutputStream.write(decText);       
-                }finally{}
- }
- catch(Exception e)
-  {
-   e.printStackTrace();
-  }
- }
-  public void func()
+   public void func()
  {
      String s2="";
      long then = System.currentTimeMillis();
